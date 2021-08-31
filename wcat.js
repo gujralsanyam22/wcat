@@ -3,7 +3,7 @@
 const fs=require("fs");
 let arguments=process.argv.slice(2);
 
-
+console.log("arguments",arguments)
 let flags=[];
 let filenames=[];
 let secondaryArguments=[];
@@ -20,6 +20,9 @@ for(let i of arguments){
         filenames.push(i);
     }
 }
+console.log("flags",flags);
+console.log("filename",filenames)
+console.log("secondArg",secondaryArguments)
 
 // if(flags.length==0){
 //     for(let file of filenames){
@@ -55,7 +58,9 @@ for(let file of filenames){
             //     }
             // }
             // filedata=tempstring;
+            console.log(secondaryArguments);
             for(let secondaryargument of secondaryArguments){
+                // console.log("filedata",filedata)
                 filedata=removeAll(filedata,secondaryargument);
             }
         }
@@ -67,8 +72,8 @@ for(let file of filenames){
             let data=addsequenceTnel(filedata);
             console.log(data);
         }
-        if(flag=="-rbl"){
-            let data=removeblankline(filedata);
+        if(flag=="-rel"){
+            let data=removeextraline(filedata);
             for(let i=0;i<data.length;i++){
             console.log(data[i]);
             }
@@ -78,10 +83,13 @@ for(let file of filenames){
 }
 
 function removeAll(string,removaldata){
+    console.log(string.split(removaldata).join(""));
+    // console.log(string);
+    
     return string.split(removaldata).join("");
 }
 
-function addsequence(content){
+function addsequence(content){ //to add a sequence to lines eg: 1 abc,\n 2 blank line,\n 3 xyz
     let contentArr=content.split("\n");
     for(let i=0;i<contentArr.length;i++){
         contentArr[i]=(i+1)+" "+contentArr[i];
@@ -89,7 +97,7 @@ function addsequence(content){
     return contentArr;
 }
 
-function addsequenceTnel(content){
+function addsequenceTnel(content){//to add a sequence to nonempty lines eg: 1 abc,\n  blank line,\n 2 xyz
     let contentArr=content.split("\n");
     let count=1;
     for(let i=0;i<contentArr.length;i++){
@@ -113,8 +121,8 @@ function addsequenceTnel(content){
 //     return data;
 // }
 
-function removeblankline(filedata){
-    let contentArr=filedata.split("\n");
+function removeextraline(fileData){
+    let contentArr=fileData.split("\n");
     let data=[];
     for(let i=1;i<contentArr.length;i++){
         if(contentArr[i]=="" && contentArr[i-1]==""){
@@ -124,6 +132,7 @@ function removeblankline(filedata){
             contentArr[i]=null;
         }
     }
+
     for(let i=0;i<contentArr.length;i++){
         if(contentArr[i]!=null){
             data.push(contentArr[i]);
